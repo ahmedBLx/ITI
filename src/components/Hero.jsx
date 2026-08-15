@@ -1,4 +1,5 @@
 import React from "react";
+import styles from "./Hero.module.css";
 
 export default function Hero() {
   const handleScroll = () => {
@@ -9,13 +10,13 @@ export default function Hero() {
   };
 
   return (
-    <section className="hero" id="hero">
-      <h1 className="hero-title">Warm Coffee, Sweet Moments</h1>
-      <p className="hero-subtitle">
+    <section className={styles.hero} id="hero">
+      <h1 className={styles.heroTitle}>Warm Coffee, Sweet Moments</h1>
+      <p className={styles.heroSubtitle}>
         Welcome to Coffeely. We serve hand-roasted organic espresso, cold brews, 
         and fresh croissants baked daily. Explore our simple menu and build your order!
       </p>
-      <button className="hero-btn" onClick={handleScroll} id="hero-cta-btn">
+      <button className={styles.heroBtn} onClick={handleScroll} id="hero-cta-btn">
         Browse Menu
       </button>
     </section>
