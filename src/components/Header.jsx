@@ -1,27 +1,55 @@
 import React from "react";
+import { Link, NavLink } from "react-router-dom";
 
 export default function Header({ orderedCount, onOrdersClick }) {
   return (
-    <header className="header" id="header">
-      <div className="header-logo">
+    <header className="header d-flex flex-wrap justify-content-between align-items-center mb-4" id="header">
+      <Link to="/" className="header-logo text-decoration-none" style={{ color: "var(--accent-coffee)" }}>
         <span>☕</span> Coffeely Cafe
-      </div>
-      <nav className="header-nav">
-        <a href="#menu" className="nav-link active">Menu</a>
-        <a 
-          href="#orders" 
-          className="nav-link" 
-          onClick={(e) => {
-            e.preventDefault();
-            onOrdersClick();
-          }}
-          id="nav-orders-link"
+      </Link>
+      
+      <nav className="header-nav d-flex align-items-center gap-3">
+        <NavLink 
+          to="/" 
+          end
+          className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}
         >
-          Orders {orderedCount > 0 && `(${orderedCount})`}
-        </a>
-        <a href="#about" className="nav-link">About Us</a>
+          Home
+        </NavLink>
+        
+        <NavLink 
+          to="/about" 
+          className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}
+        >
+          About
+        </NavLink>
+        
+        <NavLink 
+          to="/contact" 
+          className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}
+        >
+          Contact
+        </NavLink>
+
+        <NavLink 
+          to="/register" 
+          className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}
+        >
+          Register
+        </NavLink>
+
+        <button 
+          type="button"
+          className="btn btn-sm btn-outline-warning rounded-pill px-3 py-1 fw-bold d-flex align-items-center gap-1"
+          onClick={onOrdersClick}
+          id="nav-orders-btn"
+          style={{ borderColor: "var(--accent-gold)", color: "var(--accent-coffee)" }}
+        >
+          <span>📋</span> Ticket {orderedCount > 0 && `(${orderedCount})`}
+        </button>
       </nav>
-      {/* && operator: Only display order badge if orderedCount is greater than 0 */}
+
+      {/* Dynamic Order Badge */}
       {orderedCount > 0 && (
         <div 
           className="header-badge" 
@@ -29,8 +57,7 @@ export default function Header({ orderedCount, onOrdersClick }) {
           style={{ cursor: "pointer" }}
           onClick={onOrdersClick}
         >
-          {/* Ternary Operator: Correct pluralization based on ordered count */}
-          Orders: {orderedCount} {orderedCount === 1 ? "Item" : "Items"}
+          {orderedCount} {orderedCount === 1 ? "Item Ordered" : "Items Ordered"}
         </div>
       )}
     </header>
