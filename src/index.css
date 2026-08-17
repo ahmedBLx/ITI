@@ -18,6 +18,42 @@
   --text-muted: #9e8e82;
 }
 
+[data-theme="dark"] {
+  --bg-deep: #161210;
+  --bg-warm: linear-gradient(135deg, #1f1915 0%, #120e0c 100%);
+  --accent-gold: #e5b947;
+  --accent-coffee: #e8c49e;
+  --accent-cream: #28201a;
+  
+  --glass-bg: rgba(32, 26, 22, 0.88);
+  --glass-border: rgba(229, 185, 71, 0.2);
+  --glass-border-hover: rgba(229, 185, 71, 0.5);
+  --text-primary: #f7ede3;
+  --text-secondary: #d4c2b4;
+  --text-muted: #9e8c80;
+}
+
+[data-theme="dark"] .card,
+[data-theme="dark"] .modal-content {
+  background-color: var(--glass-bg) !important;
+  color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .form-control,
+[data-theme="dark"] .form-select {
+  background-color: #241c17 !important;
+  border-color: rgba(229, 185, 71, 0.25) !important;
+  color: #f7ede3 !important;
+}
+
+[data-theme="dark"] .form-control::placeholder {
+  color: #8a776c !important;
+}
+
+[data-theme="dark"] .text-dark {
+  color: #f7ede3 !important;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;

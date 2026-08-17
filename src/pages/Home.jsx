@@ -1,17 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import Hero from "../components/Hero";
 import MenuItemCard from "../components/MenuItemCard";
 import ItemDetail from "../components/ItemDetail";
+import { menuItems } from "../data/menu";
 
-export default function Home({
-  menuItems,
-  filter,
-  setFilter,
-  selectedItem,
-  setSelectedItem,
-  orders,
-  handleAddToOrder,
-}) {
+export default function Home() {
+  const [filter, setFilter] = useState("all");
+  const [selectedItem, setSelectedItem] = useState(menuItems[0]);
+
   const filterOptions = ["all", "hot", "cold", "pastry"];
 
   const filteredItems = menuItems.filter(
@@ -20,10 +16,10 @@ export default function Home({
 
   return (
     <div>
-      {/* Reusable Hero segment styled with CSS Modules */}
+      {/* Hero section styled with CSS Modules */}
       <Hero />
 
-      {/* Main Menu Section using Bootstrap Grid */}
+      {/* Main Menu Section */}
       <section className="py-4" id="menu">
         <div style={{ marginBottom: "2rem" }}>
           <h2 style={{ fontFamily: "var(--font-heading)", fontSize: "2rem", marginBottom: "0.5rem" }}>
@@ -34,7 +30,7 @@ export default function Home({
           </p>
         </div>
 
-        {/* Filter Navigation using Bootstrap classes & inline style */}
+        {/* Filter Navigation */}
         <div className="filters d-flex gap-2 flex-wrap mb-4" style={{ padding: "0.25rem" }}>
           {filterOptions.map((option) => (
             <button
@@ -53,7 +49,7 @@ export default function Home({
 
         {/* Bootstrap Responsive Grid row */}
         <div className="row g-4" style={{ marginTop: "1rem" }}>
-          {/* List of cards (Columns 12 on mobile, 7 on large desktop) */}
+          {/* List of cards */}
           <div className="col-12 col-lg-7">
             <div className="row row-cols-1 row-cols-sm-2 g-3">
               {filteredItems.map((item) => (
@@ -68,13 +64,9 @@ export default function Home({
             </div>
           </div>
 
-          {/* Item details card (Columns 12 on mobile, 5 on large desktop) */}
+          {/* Item details card connected to Redux */}
           <div className="col-12 col-lg-5">
-            <ItemDetail
-              item={selectedItem}
-              isOrdered={selectedItem ? orders.some((o) => o.id === selectedItem.id) : false}
-              onOrder={handleAddToOrder}
-            />
+            <ItemDetail item={selectedItem} />
           </div>
         </div>
       </section>

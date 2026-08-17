@@ -1,5 +1,7 @@
 import React from "react";
 import styled from "styled-components";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart, selectCartItems } from "../redux/slices/cartSlice";
 
 const DetailContainer = styled.div`
   background: var(--glass-bg);
@@ -35,8 +37,8 @@ const DetailPlaceholderContainer = styled.div`
 `;
 
 const CaloriesBadge = styled.div`
-  background: #f8f1e5;
-  border: 1px solid rgba(92, 64, 51, 0.1);
+  background: rgba(92, 64, 51, 0.04);
+  border: 1px solid var(--glass-border);
   border-radius: 12px;
   padding: 0.75rem 1rem;
   display: flex;
@@ -47,7 +49,7 @@ const CaloriesBadge = styled.div`
   transition: all 0.3s ease;
 
   &:hover {
-    background: #efe5d3;
+    background: rgba(197, 155, 39, 0.1);
     transform: translateY(-2px);
   }
 `;
@@ -72,26 +74,38 @@ const IngredientItem = styled.li`
 
 const OrderButton = styled.button`
   width: 100%;
-  background: ${props => props.$isOrdered ? "#28a745" : "var(--accent-coffee)"};
+  background: ${(props) => (props.$inCart ? "#28a745" : "var(--accent-coffee)")};
   color: #fff;
   border: none;
   padding: 0.9rem;
   font-size: 1rem;
   font-weight: 700;
   border-radius: 12px;
-  cursor: ${props => props.$isOrdered ? "not-allowed" : "pointer"};
-  box-shadow: 0 4px 15px ${props => props.$isOrdered ? "rgba(40, 167, 69, 0.2)" : "rgba(92, 64, 51, 0.2)"};
+  cursor: pointer;
+  box-shadow: 0 4px 15px
+    ${(props) => (props.$inCart ? "rgba(40, 167, 69, 0.2)" : "rgba(92, 64, 51, 0.2)")};
   transition: all 0.3s ease;
 
   &:hover {
-    background: ${props => props.$isOrdered ? "#28a745" : "var(--accent-gold)"};
-    transform: ${props => props.$isOrdered ? "none" : "translateY(-2px)"};
-    box-shadow: 0 6px 20px ${props => props.$isOrdered ? "rgba(40, 167, 69, 0.2)" : "rgba(197, 155, 39, 0.3)"};
+    background: ${(props) => (props.$inCart ? "#218838" : "var(--accent-gold)")};
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px
+      ${(props) => (props.$inCart ? "rgba(40, 167, 69, 0.3)" : "rgba(197, 155, 39, 0.3)")};
   }
 `;
 
-export default function ItemDetail({ item, isOrdered, onOrder }) {
-  // Render either item details or a select prompt placeholder
+export default function ItemDetail({ item }) {
+  const dispatch = useDispatch();
+  const cartItems = useSelector(selectCartItems);
+  const existingCartItem = item ? cartItems.find((i) => i.id === item.id) : null;
+  const inCartCount = existingCartItem ? existingCartItem.quantity : 0;
+
+  const handleAddToCart = () => {
+    if (item) {
+      dispatch(addToCart(item));
+    }
+  };
+
   return item ? (
     <DetailContainer id="detail-panel">
       <div className="detail-header">
@@ -121,7 +135,6 @@ export default function ItemDetail({ item, isOrdered, onOrder }) {
       <div className="detail-ingredients">
         <h4 className="ingredients-title">Ingredients Used</h4>
         <ul className="ingredients-list" style={{ paddingLeft: "0" }}>
-          {/* Mapping over ingredients list */}
           {item.ingredients.map((ing, index) => (
             <IngredientItem key={index}>
               <span className="ingredient-bullet">☕</span>
@@ -132,22 +145,19 @@ export default function ItemDetail({ item, isOrdered, onOrder }) {
       </div>
 
       <div className="order-container">
-        {/* Styled Component OrderButton with $isOrdered dynamic prop */}
-        <OrderButton 
-          $isOrdered={isOrdered}
-          onClick={() => !isOrdered && onOrder(item.id)}
-          disabled={isOrdered}
+        <OrderButton
+          $inCart={inCartCount > 0}
+          onClick={handleAddToCart}
           id="order-btn"
         >
-          {isOrdered ? "✓ Added to Order" : "Add to Order"}
+          {inCartCount > 0 ? `+ Add More to Cart (${inCartCount} added)` : "🛒 Add to Shopping Cart"}
         </OrderButton>
 
-        {/* && operator: Display success message banner when isOrdered is true */}
-        {isOrdered && (
-          <div className="order-success-banner" id="order-success-banner">
+        {inCartCount > 0 && (
+          <div className="order-success-banner mt-2" id="order-success-banner">
             <span className="success-icon">🎉</span>
             <div>
-              <strong>Order Confirmed!</strong> {item.name} was successfully added to your ticket.
+              <strong>In Shopping Cart!</strong> {inCartCount} × {item.name} added.
             </div>
           </div>
         )}
